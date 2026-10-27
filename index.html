@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales Competitor Benchmarking</title>
+<style>
+:root{--navy:#17365d;--blue:#2563eb;--bg:#f4f7fb;--border:#e2e8f0}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#172033}
+header{background:var(--navy);color:white;padding:25px 5%}
+header h1{margin:0 0 8px;font-size:25px}
+header p{margin:0;color:#dbeafe;font-size:14px}
+main{max-width:1200px;margin:25px auto;padding:0 18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
+.stat,.panel{background:white;border:1px solid var(--border);border-radius:12px;padding:18px}
+.stat small{color:#64748b}
+.stat strong{display:block;font-size:28px;margin-top:10px;color:var(--navy)}
+.panel{margin-bottom:20px}
+h2{font-size:18px;margin:0 0 18px}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
+input,select,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;font:inherit;background:white}
+textarea{min-height:75px;resize:vertical}
+button{border:0;border-radius:7px;padding:10px 14px;background:var(--blue);color:white;cursor:pointer;font-weight:bold}
+button:hover{opacity:.88}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.danger{background:#dc2626}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:850px}
+th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:#f8fafc;color:#475569}
+.score{font-weight:bold;color:var(--navy)}
+.muted{color:#64748b;font-size:12px}
+.empty{text-align:center;padding:30px;color:#64748b}
+@media(max-width:600px){.toolbar{grid-template-columns:1fr}header h1{font-size:21px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Sales Competitor Benchmarking</h1>
+  <p>Monitor kompetitor, evaluasi performa, dan susun strategi penjualan.</p>
+</header>
+<main>
+  <section class="stats">
+    <div class="stat"><small>Total Kompetitor</small><strong id="total">0</strong></div>
+    <div class="stat"><small>Rata-rata Skor</small><strong id="average">0</strong></div>
+    <div class="stat"><small>Skor Tertinggi</small><strong id="highest">0</strong></div>
+    <div class="stat"><small>Total Observasi</small><strong id="observations">0</strong></div>
+  </section>
+
+  <section class="panel">
+    <h2 id="formTitle">Tambah Observasi Kompetitor</h2>
+    <form id="competitorForm">
+      <input type="hidden" id="editId">
+      <div class="formgrid">
+        <div><label for="name">Nama Kompetitor *</label><input id="name" required placeholder="Nama perusahaan/toko"></div>
+        <div><label for="city">Kota / Wilayah *</label><input id="city" required placeholder="Contoh: Karawang"></div>
+        <div><label for="category">Kategori Produk</label><input id="category" placeholder="Contoh: ATK, printer, tinta"></div>
+        <div><label for="date">Tanggal Observasi *</label><input id="date" type="date" required></div>
+        <div><label for="price">Harga (skala 1–5)</label><select id="price"><option value="3">3 - Sedang</option><option value="1">1 - Sangat mahal</option><option value="2">2 - Mahal</option><option value="4">4 - Murah</option><option value="5">5 - Sangat murah</option></select></div>
+        <div><label for="quality">Kualitas Produk (1–5)</label><select id="quality"><option value="3">3 - Sedang</option><option value="1">1 - Rendah</option><option value="2">2 - Cukup rendah</option><option value="4">4 - Baik</option><option value="5">5 - Sangat baik</option></select></div>
+        <div><label for="service">Pelayanan (1–5)</label><select id="service"><option value="3">3 - Sedang</option><option value="1">1 - Kurang</option><option value="2">2 - Cukup</option><option value="4">4 - Baik</option><option value="5">5 - Sangat baik</option></select></div>
+        <div><label for="availability">Ketersediaan Barang (1–5)</label><select id="availability"><option value="3">3 - Sedang</option><option value="1">1 - Kurang</option><option value="2">2 - Cukup</option><option value="4">4 - Baik</option><option value="5">5 - Sangat baik</option></select></div>
+        <div><label for="promotion">Promosi (1–5)</label><select id="promotion"><option value="3">3 - Sedang</option><option value="1">1 - Kurang</option><option value="2">2 - Cukup</option><option value="4">4 - Baik</option><option value="5">5 - Sangat baik</option></select></div>
+        <div><label for="observer">Nama Pengamat</label><input id="observer" placeholder="Nama sales / PIC"></div>
+      </div>
+      <div style="margin-top:13px"><label for="strengths">Kelebihan Kompetitor</label><textarea id="strengths" placeholder="Apa yang menjadi keunggulan kompetitor?"></textarea></div>
+      <div style="margin-top:13px"><label for="weaknesses">Kekurangan Kompetitor</label><textarea id="weaknesses" placeholder="Apa yang perlu diperhatikan?"></textarea></div>
+      <div style="margin-top:13px"><label for="notes">Catatan / Rencana Tindak Lanjut</label><textarea id="notes" placeholder="Strategi atau peluang yang perlu dilakukan"></textarea></div>
+      <div class="actions">
+        <button type="submit" id="saveButton">Simpan Observasi</button>
+        <button type="button" class="secondary" id="cancelButton" hidden>Batal Edit</button>
+        <button type="reset" class="secondary" id="resetButton">Kosongkan Form</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h2>Daftar Kompetitor</h2>
+    <div class="toolbar">
+      <input id="search" placeholder="Cari nama, kota, kategori...">
+      <select id="scoreFilter"><option value="0">Semua skor</option><option value="1">Skor 1–2</option><option value="3">Skor 3</option><option value="4">Skor 4–5</option></select>
+      <select id="sort"><option value="newest">Observasi terbaru</option><option value="highest">Skor tertinggi</option><option value="lowest">Skor terendah</option><option value="name">Nama A–Z</option></select>
+    </div>
+    <div class="actions" style="margin:0 0 14px">
+      <button type="button" id="exportButton">Ekspor CSV</button>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Kompetitor</th><th>Wilayah</th><th>Tanggal</th><th>Skor / 5</th><th>Kelebihan & Kekurangan</th><th>Pengamat</th><th>Aksi</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div id="empty" class="empty">Belum ada data. Tambahkan observasi pertama melalui formulir di atas.</div>
+    </div>
+  </section>
+  <p class="muted">Versi awal — data tersimpan di browser ini. Belum dibagikan ke pengguna lain.</p>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const fields = ["name","city","category","date","price","quality","service","availability","promotion","observer","strengths","weaknesses","notes"];
+let records = [];
+try { records = JSON.parse(localStorage.getItem("scb_records") || "[]"); } catch(e) {}
+const today = new Date().toLocaleDateString("en-CA");
+$("date").value = today;
+
+function score(r) {
+  return (Number(r.price)+Number(r.quality)+Number(r.service)+Number(r.availability)+Number(r.promotion))/5;
+}
+function persist() {
+  localStorage.setItem("scb_records", JSON.stringify(records));
+  render();
+}
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function render() {
+  $("total").textContent = records.length;
+  $("observations").textContent = records.length;
+  $("average").textContent = records.length ? (records.reduce((a,r)=>a+score(r),0)/records.length).toFixed(1) : "0";
+  $("highest").textContent = records.length ? Math.max(...records.map(score)).toFixed(1) : "0";
+  let list = records.filter(r => {
+    const q = $("search").value.toLowerCase();
+    const matches = [r.name,r.city,r.category,r.observer].some(v => String(v||"").toLowerCase().includes(q));
+    const s = score(r), f = $("scoreFilter").value;
+    return matches && (!f || (f==="1" ? s<3 : f==="3" ? s>=3 && s<4 : s>=4));
+  });
+  const sort = $("sort").value;
+  list.sort((a,b)=> sort==="highest" ? score(b)-score(a) : sort==="lowest" ? score(a)-score(b) : sort==="name" ? a.name.localeCompare(b.name) : b.date.localeCompare(a.date));
+  $("rows").innerHTML = list.map(r => `<tr>
+    <td><strong>${escapeHTML(r.name)}</strong><br><span class="muted">${escapeHTML(r.category)}</span></td>
+    <td>${escapeHTML(r.city)}</td>
+    <td>${escapeHTML(r.date)}</td>
+    <td class="score">${score(r).toFixed(1)} / 5</td>
+    <td><strong>+</strong> ${escapeHTML(r.strengths||"-")}<br><strong>−</strong> ${escapeHTML(r.weaknesses||"-")}<br><span class="muted">${escapeHTML(r.notes||"")}</span></td>
+    <td>${escapeHTML(r.observer||"-")}</td>
+    <td><button type="button" class="secondary" onclick="editRecord('${r.id}')">Edit</button> <button type="button" class="danger" onclick="deleteRecord('${r.id}')">Hapus</button></td>
+  </tr>`).join("");
+  $("empty").style.display = list.length ? "none" : "block";
+}
+$("competitorForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const id = $("editId").value;
+  const data = {};
+  fields.forEach(f => data[f] = $(f).value.trim());
+  if (id) {
+    const i = records.findIndex(r=>r.id===id);
+    if(i>=0) records[i] = {...records[i],...data};
+  } else {
+    records.push({id:Date.now().toString(),...data});
+  }
+  persist();
+  resetForm();
+  alert(id ? "Observasi berhasil diperbarui." : "Observasi berhasil disimpan.");
+});
+function editRecord(id) {
+  const r = records.find(r=>r.id===id);
+  if(!r) return;
+  $("editId").value = id;
+  fields.forEach(f=>$(f).value = r[f] ?? "");
+  $("formTitle").textContent = "Edit Observasi Kompetitor";
+  $("saveButton").textContent = "Simpan Perubahan";
+  $("cancelButton").hidden = false;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function deleteRecord(id) {
+  if(!confirm("Yakin ingin menghapus observasi ini?")) return;
+  records = records.filter(r=>r.id!==id);
+  persist();
+  if($("editId").value===id) resetForm();
+}
+function resetForm() {
+  $("competitorForm").reset();
+  $("editId").value = "";
+  $("date").value = today;
+  $("formTitle").textContent = "Tambah Observasi Kompetitor";
+  $("saveButton").textContent = "Simpan Observasi";
+  $("cancelButton").hidden = true;
+}
+$("cancelButton").addEventListener("click",resetForm);
+$("resetButton").addEventListener("click",()=>setTimeout(resetForm,0));
+["search","scoreFilter","sort"].forEach(id=>$(id).addEventListener("input",render));
+$("exportButton").addEventListener("click",()=>{
+  if(!records.length){alert("Belum ada data untuk diekspor.");return;}
+  const cols = [...fields,"score"];
+  const quote = v => '"' + String(v??"").replace(/"/g,'""') + '"';
+  const csv = [cols.map(quote).join(","),...records.map(r=>cols.map(c=>quote(c==="score"?score(r).toFixed(1):r[c])).join(","))].join("\r\n");
+  const blob = new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");a.href=url;a.download="sales-competitor-benchmarking.csv";a.click();
+  URL.revokeObjectURL(url);
+});
+render();
+</script>
+</body>
+</html>
