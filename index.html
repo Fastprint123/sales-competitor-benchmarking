@@ -105,8 +105,31 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
       <input type="hidden" id="editId">
       <div class="grid">
         <div class="field"><label for="name">Nama kompetitor *</label><input id="name" required placeholder="Nama perusahaan / toko"></div>
-        <div class="field"><label for="category">Kategori bisnis *</label><input id="category" required placeholder="Contoh: retail, percetakan"></div>
-        <div class="field"><label for="city">Kota *</label><input id="city" required placeholder="Contoh: Karawang"></div>
+        
+<div class="field">
+  <label for="category">Kategori bisnis *</label>
+  <select id="category" required>
+    <option value="">Pilih kategori bisnis</option>
+    <option value="Retail">Retail</option>
+    <option value="Grosir">Grosir</option>
+    <option value="Reseller">Reseller</option>
+  </select>
+</div>
+
+<div class="field">
+  <label for="productCategories">Kategori produk</label>
+  <select id="productCategories" multiple size="1">
+    <option value="Sparepart">Sparepart</option>
+    <option value="Tinta Printer">Tinta Printer</option>
+    <option value="Stempel">Stempel</option>
+    <option value="Aksesoris">Aksesoris</option>
+    <option value="Mesin Stempel">Mesin Stempel</option>
+    <option value="Kertas">Kertas</option>
+  </select>
+  <p class="small">Pilih satu atau beberapa kategori. Di komputer, tahan Ctrl sambil mengeklik untuk memilih beberapa kategori.</p>
+</div>
+
+        <or="city">Kota *</label><input id="city" required placeholder="Contoh: Karawang"></div>
         <div class="field"><label for="website">Website / media sosial</label><input id="website" placeholder="URL jika ada"></div>
         <div class="field"><label for="contact">Kontak utama</label><input id="contact" placeholder="Nama / nomor telepon"></div>
         <div class="field"><label for="pic">PIC pengamat</label><input id="pic" placeholder="Nama PIC internal"></div>
@@ -311,6 +334,9 @@ $("competitorForm").addEventListener("submit",e=>{
   const item={
     id:id||makeId(),
     name:$("name").value.trim(),
+    productCategories: Array.from(
+  $("productCategories").selectedOptions
+).map(option => option.value),
     category:$("category").value.trim(),
     city:$("city").value.trim(),
     website:$("website").value.trim(),
@@ -341,6 +367,10 @@ function editCompetitor(id){
   const c=data.competitors.find(x=>x.id===id); if(!c)return;
   $("editId").value=c.id; $("formTitle").textContent="Edit Kompetitor";
   ["name","category","city","website","contact","pic","visitDate","ourCompany"].forEach(k=>$(k).value=c[k]||"");
+
+Array.from($("productCategories").options).forEach(option => {
+  option.selected = (c.productCategories || []).includes(option.value);
+});
   $("branches").innerHTML="";
   (c.branches?.length?c.branches:[{}]).forEach(b=>addBranchRow(b));
   renderStages(c.stages||[]);
