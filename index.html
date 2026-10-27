@@ -6,196 +6,535 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sales Competitor Benchmarking</title>
 <style>
-:root{--navy:#17365d;--blue:#2563eb;--bg:#f4f7fb;--border:#e2e8f0}
+:root{--navy:#17324d;--blue:#2463a6;--bg:#f4f7fb;--border:#dce4ed;--text:#243447;--muted:#66788a}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#172033}
-header{background:var(--navy);color:white;padding:25px 5%}
-header h1{margin:0 0 8px;font-size:25px}
-header p{margin:0;color:#dbeafe;font-size:14px}
-main{max-width:1200px;margin:25px auto;padding:0 18px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
-.stat,.panel{background:white;border:1px solid var(--border);border-radius:12px;padding:18px}
-.stat small{color:#64748b}
-.stat strong{display:block;font-size:28px;margin-top:10px;color:var(--navy)}
-.panel{margin-bottom:20px}
-h2{font-size:18px;margin:0 0 18px}
-.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px}
-label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
-input,select,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;font:inherit;background:white}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:14px}
+header{background:var(--navy);color:white;padding:23px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+header h1{font-size:23px;margin:0 0 7px}
+header p{margin:0;color:#d6e4f2}
+main{max-width:1400px;margin:auto;padding:24px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+button,.button{border:0;border-radius:7px;padding:10px 14px;cursor:pointer;font-weight:600;font-size:13px}
+nav button{background:white;color:var(--navy);border:1px solid var(--border)}
+nav button.active,.primary{background:var(--blue);color:white}
+.secondary{background:#e8eef5;color:var(--navy)}
+.danger{background:#fdeaea;color:#a12a2a}
+.panel{background:white;border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px}
+h2{font-size:19px;margin:0 0 17px}
+h3{font-size:15px;margin:20px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+label{font-weight:600;font-size:12px;color:#47596b}
+input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:7px;padding:10px;font:inherit;background:white;color:var(--text)}
 textarea{min-height:75px;resize:vertical}
-button{border:0;border-radius:7px;padding:10px 14px;background:var(--blue);color:white;cursor:pointer;font-weight:bold}
-button:hover{opacity:.88}
-button.secondary{background:#e2e8f0;color:#1e293b}
-button.danger{background:#dc2626}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
-.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}
+.stat{background:white;border:1px solid var(--border);border-radius:12px;padding:18px}
+.stat span{display:block;color:var(--muted);font-size:12px;margin-bottom:9px}
+.stat strong{font-size:27px;color:var(--navy)}
 .tablewrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:13px;min-width:850px}
-th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
-th{background:#f8fafc;color:#475569}
-.score{font-weight:bold;color:var(--navy)}
-.muted{color:#64748b;font-size:12px}
-.empty{text-align:center;padding:30px;color:#64748b}
-@media(max-width:600px){.toolbar{grid-template-columns:1fr}header h1{font-size:21px}}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th,td{text-align:left;border-bottom:1px solid #e5ebf1;padding:12px 10px;vertical-align:top}
+th{font-size:12px;color:#536579;background:#f8fafc}
+td{font-size:13px}
+.small{font-size:12px;color:var(--muted)}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;background:#edf2f7;font-size:11px}
+.high{background:#fee2e2;color:#991b1b}.medium{background:#fef3c7;color:#92400e}.low{background:#dcfce7;color:#166534}
+.stage{border:1px solid var(--border);border-radius:9px;padding:14px;margin:12px 0}
+.stage h4{margin:0 0 8px;font-size:14px}
+.stage p{color:var(--muted);margin:0 0 10px;font-size:12px}
+.stagegrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hidden{display:none!important}
+.notice{background:#fff8e6;border:1px solid #f2dfad;padding:12px;border-radius:8px;margin-bottom:16px;color:#76551b;font-size:12px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar>*{flex:1;min-width:150px}
+hr{border:0;border-top:1px solid var(--border);margin:20px 0}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
+@media(max-width:850px){.grid,.cards{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:14px}}
+@media(max-width:520px){.grid,.cards,.stagegrid{grid-template-columns:1fr}header{padding:20px}main{padding:10px}.panel{padding:14px}}
 </style>
 </head>
 <body>
 <header>
-  <h1>Sales Competitor Benchmarking</h1>
-  <p>Monitor kompetitor, evaluasi performa, dan susun strategi penjualan.</p>
+  <div>
+    <h1>Sales Competitor Benchmarking</h1>
+    <p>Analisis kompetitor, observasi sales, dan rencana peningkatan penjualan</p>
+  </div>
+  <span class="badge">Internal Sales Dashboard</span>
 </header>
-<main>
-  <section class="stats">
-    <div class="stat"><small>Total Kompetitor</small><strong id="total">0</strong></div>
-    <div class="stat"><small>Rata-rata Skor</small><strong id="average">0</strong></div>
-    <div class="stat"><small>Skor Tertinggi</small><strong id="highest">0</strong></div>
-    <div class="stat"><small>Total Observasi</small><strong id="observations">0</strong></div>
-  </section>
 
-  <section class="panel">
-    <h2 id="formTitle">Tambah Observasi Kompetitor</h2>
+<main>
+<nav>
+  <button class="active" data-tab="dashboard">Dashboard</button>
+  <button data-tab="form">Tambah / Edit Data</button>
+  <button data-tab="list">Data Kompetitor</button>
+  <button data-tab="gap">Gap Analysis</button>
+  <button data-tab="transfer">Import / Export</button>
+</nav>
+
+<div class="notice">
+  <strong>Catatan penyimpanan:</strong> data tersimpan di browser perangkat ini. Gunakan ekspor CSV untuk membuat cadangan. Impor CSV bukan sinkronisasi langsung dengan Google Sheets.
+</div>
+
+<section id="dashboard" class="tab">
+  <div class="cards">
+    <div class="stat"><span>Total kompetitor</span><strong id="statCompetitors">0</strong></div>
+    <div class="stat"><span>Total cabang</span><strong id="statBranches">0</strong></div>
+    <div class="stat"><span>Observasi selesai</span><strong id="statObserved">0%</strong></div>
+    <div class="stat"><span>Aksi belum selesai</span><strong id="statActions">0</strong></div>
+  </div>
+  <div class="panel">
+    <h2>Ringkasan Kompetitor</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Kompetitor</th><th>Kota</th><th>Kategori</th><th>Cabang</th><th>Skor observasi</th><th>Detail</th></tr></thead>
+      <tbody id="dashboardRows"></tbody>
+    </table></div>
+  </div>
+  <div class="panel">
+    <h2>Ringkasan Gap Analysis</h2>
+    <div id="gapSummary" class="small">Belum ada data gap analysis.</div>
+  </div>
+</section>
+
+<section id="form" class="tab hidden">
+  <div class="panel">
+    <h2 id="formTitle">Tambah Kompetitor</h2>
+    <p class="small">Isi informasi kompetitor dan cabangnya. Kolom bertanda * wajib diisi.</p>
     <form id="competitorForm">
       <input type="hidden" id="editId">
-      <div class="formgrid">
-        <div><label for="name">Nama Kompetitor *</label><input id="name" required placeholder="Nama perusahaan/toko"></div>
-        <div><label for="city">Kota / Wilayah *</label><input id="city" required placeholder="Contoh: Karawang"></div>
-        <div><label for="category">Kategori Produk</label><input id="category" placeholder="Contoh: ATK, printer, tinta"></div>
-        <div><label for="date">Tanggal Observasi *</label><input id="date" type="date" required></div>
-        <div><label for="price">Harga (skala 1–5)</label><select id="price"><option value="3">3 - Sedang</option><option value="1">1 - Sangat mahal</option><option value="2">2 - Mahal</option><option value="4">4 - Murah</option><option value="5">5 - Sangat murah</option></select></div>
-        <div><label for="quality">Kualitas Produk (1–5)</label><select id="quality"><option value="3">3 - Sedang</option><option value="1">1 - Rendah</option><option value="2">2 - Cukup rendah</option><option value="4">4 - Baik</option><option value="5">5 - Sangat baik</option></select></div>
-        <div><label for="service">Pelayanan (1–5)</label><select id="service"><option value="3">3 - Sedang</option><option value="1">1 - Kurang</option><option value="2">2 - Cukup</option><option value="4">4 - Baik</option><option value="5">5 - Sangat baik</option></select></div>
-        <div><label for="availability">Ketersediaan Barang (1–5)</label><select id="availability"><option value="3">3 - Sedang</option><option value="1">1 - Kurang</option><option value="2">2 - Cukup</option><option value="4">4 - Baik</option><option value="5">5 - Sangat baik</option></select></div>
-        <div><label for="promotion">Promosi (1–5)</label><select id="promotion"><option value="3">3 - Sedang</option><option value="1">1 - Kurang</option><option value="2">2 - Cukup</option><option value="4">4 - Baik</option><option value="5">5 - Sangat baik</option></select></div>
-        <div><label for="observer">Nama Pengamat</label><input id="observer" placeholder="Nama sales / PIC"></div>
+      <div class="grid">
+        <div class="field"><label for="name">Nama kompetitor *</label><input id="name" required placeholder="Nama perusahaan / toko"></div>
+        <div class="field"><label for="category">Kategori bisnis *</label><input id="category" required placeholder="Contoh: retail, percetakan"></div>
+        <div class="field"><label for="city">Kota *</label><input id="city" required placeholder="Contoh: Karawang"></div>
+        <div class="field"><label for="website">Website / media sosial</label><input id="website" placeholder="URL jika ada"></div>
+        <div class="field"><label for="contact">Kontak utama</label><input id="contact" placeholder="Nama / nomor telepon"></div>
+        <div class="field"><label for="pic">PIC pengamat</label><input id="pic" placeholder="Nama PIC internal"></div>
+        <div class="field"><label for="visitDate">Tanggal observasi</label><input id="visitDate" type="date"></div>
+        <div class="field"><label for="ourCompany">Nama perusahaan kita</label><input id="ourCompany" placeholder="Nama perusahaan sendiri"></div>
       </div>
-      <div style="margin-top:13px"><label for="strengths">Kelebihan Kompetitor</label><textarea id="strengths" placeholder="Apa yang menjadi keunggulan kompetitor?"></textarea></div>
-      <div style="margin-top:13px"><label for="weaknesses">Kekurangan Kompetitor</label><textarea id="weaknesses" placeholder="Apa yang perlu diperhatikan?"></textarea></div>
-      <div style="margin-top:13px"><label for="notes">Catatan / Rencana Tindak Lanjut</label><textarea id="notes" placeholder="Strategi atau peluang yang perlu dilakukan"></textarea></div>
+
+      <h3>Informasi cabang</h3>
+      <p class="small">Satu kompetitor dapat memiliki beberapa cabang. Pisahkan data cabang dengan satu baris per cabang.</p>
+      <div id="branches"></div>
+      <div class="actions"><button type="button" class="secondary" id="addBranch">+ Tambah Cabang</button></div>
+
+      <hr>
+      <h3>10 Tahap Observasi Sales</h3>
+      <p class="small">Pilih “Belum diamati” jika belum ada bukti observasi. Skor 1 = kurang, 2 = cukup, 3 = baik.</p>
+      <div id="stages"></div>
+
       <div class="actions">
-        <button type="submit" id="saveButton">Simpan Observasi</button>
-        <button type="button" class="secondary" id="cancelButton" hidden>Batal Edit</button>
-        <button type="reset" class="secondary" id="resetButton">Kosongkan Form</button>
+        <button class="primary" type="submit">Simpan Kompetitor</button>
+        <button class="secondary" type="button" id="resetForm">Kosongkan Form</button>
       </div>
     </form>
-  </section>
+  </div>
+</section>
 
-  <section class="panel">
-    <h2>Daftar Kompetitor</h2>
+<section id="list" class="tab hidden">
+  <div class="panel">
+    <h2>Data Kompetitor</h2>
     <div class="toolbar">
-      <input id="search" placeholder="Cari nama, kota, kategori...">
-      <select id="scoreFilter"><option value="0">Semua skor</option><option value="1">Skor 1–2</option><option value="3">Skor 3</option><option value="4">Skor 4–5</option></select>
-      <select id="sort"><option value="newest">Observasi terbaru</option><option value="highest">Skor tertinggi</option><option value="lowest">Skor terendah</option><option value="name">Nama A–Z</option></select>
+      <input id="search" placeholder="Cari nama, kota, kategori, atau PIC">
+      <select id="filterCity"><option value="">Semua kota</option></select>
+      <select id="filterCategory"><option value="">Semua kategori</option></select>
+      <select id="filterScore"><option value="">Semua skor</option><option value="high">Skor tinggi (2,5–3)</option><option value="medium">Skor sedang (1,5–2,49)</option><option value="low">Skor rendah (&lt;1,5)</option><option value="none">Belum ada skor</option></select>
     </div>
-    <div class="actions" style="margin:0 0 14px">
-      <button type="button" id="exportButton">Ekspor CSV</button>
-    </div>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Kompetitor</th><th>Wilayah</th><th>Tanggal</th><th>Skor / 5</th><th>Kelebihan & Kekurangan</th><th>Pengamat</th><th>Aksi</th></tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
-      <div id="empty" class="empty">Belum ada data. Tambahkan observasi pertama melalui formulir di atas.</div>
-    </div>
-  </section>
-  <p class="muted">Versi awal — data tersimpan di browser ini. Belum dibagikan ke pengguna lain.</p>
-</main>
-<script>
-const $ = id => document.getElementById(id);
-const fields = ["name","city","category","date","price","quality","service","availability","promotion","observer","strengths","weaknesses","notes"];
-let records = [];
-try { records = JSON.parse(localStorage.getItem("scb_records") || "[]"); } catch(e) {}
-const today = new Date().toLocaleDateString("en-CA");
-$("date").value = today;
+    <div class="tablewrap"><table>
+      <thead><tr><th>Nama</th><th>Kota / kategori</th><th>Cabang</th><th>Skor</th><th>PIC</th><th>Aksi</th></tr></thead>
+      <tbody id="competitorRows"></tbody>
+    </table></div>
+  </div>
+</section>
 
-function score(r) {
-  return (Number(r.price)+Number(r.quality)+Number(r.service)+Number(r.availability)+Number(r.promotion))/5;
+<section id="gap" class="tab hidden">
+  <div class="panel">
+    <h2>Gap Analysis & Rencana Aksi</h2>
+    <p class="small">Bandingkan kemampuan kompetitor dengan perusahaan kita, kemudian tetapkan prioritas dan PIC tindak lanjut.</p>
+    <form id="gapForm">
+      <input type="hidden" id="gapEditId">
+      <div class="grid">
+        <div class="field"><label for="gapCompetitor">Kompetitor *</label><select id="gapCompetitor" required><option value="">Pilih kompetitor</option></select></div>
+        <div class="field"><label for="gapArea">Aspek yang dibandingkan *</label><input id="gapArea" required placeholder="Contoh: follow-up pelanggan"></div>
+        <div class="field"><label for="competitorStatus">Kondisi kompetitor</label><select id="competitorStatus"><option>Belum diketahui</option><option>Sudah punya</option><option>Belum punya</option></select></div>
+        <div class="field"><label for="ourStatus">Kondisi perusahaan kita</label><select id="ourStatus"><option>Belum diketahui</option><option>Sudah punya</option><option>Belum punya</option></select></div>
+        <div class="field"><label for="priority">Prioritas</label><select id="priority"><option>Medium</option><option>High</option><option>Low</option></select></div>
+        <div class="field"><label for="actionPIC">PIC aksi</label><input id="actionPIC" placeholder="Nama penanggung jawab"></div>
+        <div class="field"><label for="actionStatus">Status aksi</label><select id="actionStatus"><option>Belum dimulai</option><option>Dalam proses</option><option>Selesai</option></select></div>
+        <div class="field"><label for="dueDate">Target selesai</label><input id="dueDate" type="date"></div>
+        <div class="field full"><label for="actionPlan">Rencana aksi</label><textarea id="actionPlan" placeholder="Apa yang perlu dilakukan untuk menutup gap?"></textarea></div>
+        <div class="field full"><label for="gapNotes">Catatan / bukti</label><textarea id="gapNotes" placeholder="Temuan atau bukti pendukung"></textarea></div>
+      </div>
+      <div class="actions"><button class="primary" type="submit">Simpan Gap</button><button type="button" class="secondary" id="resetGap">Kosongkan Form</button></div>
+    </form>
+  </div>
+  <div class="panel">
+    <h2>Daftar Gap & Rencana Aksi</h2>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Kompetitor</th><th>Aspek</th><th>Kompetitor</th><th>Perusahaan kita</th><th>Prioritas</th><th>Aksi / PIC</th><th>Status</th><th>Kelola</th></tr></thead>
+      <tbody id="gapRows"></tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="transfer" class="tab hidden">
+  <div class="panel">
+    <h2>Import Data dari Google Sheets</h2>
+    <p>Di Google Sheets, pilih <b>File → Download → Comma-separated values (.csv)</b>. Lalu pilih file CSV di bawah.</p>
+    <p class="small">Kolom yang dikenali untuk import kompetitor: <code>name</code>, <code>category</code>, <code>city</code>, <code>website</code>, <code>contact</code>, <code>pic</code>, <code>ourCompany</code>. Nama kolom boleh memakai label Indonesia seperti Nama Kompetitor, Kategori, Kota, Website, Kontak, dan PIC.</p>
+    <div class="field"><label for="csvFile">Pilih file CSV</label><input id="csvFile" type="file" accept=".csv,text/csv"></div>
+    <div class="actions"><button class="primary" id="importBtn" type="button">Import CSV</button></div>
+    <p class="small">Jika nama kompetitor sudah ada, kamu dapat memilih memperbarui data atau melewati baris tersebut. Impor ini belum mengimpor detail cabang, skor observasi, atau gap analysis.</p>
+  </div>
+  <div class="panel">
+    <h2>Ekspor & Cadangan</h2>
+    <p>Unduh data untuk analisis lebih lanjut atau simpan sebagai cadangan sebelum mengubah website.</p>
+    <div class="actions">
+      <button class="primary" id="exportCompetitors">Ekspor Kompetitor CSV</button>
+      <button class="secondary" id="exportGaps">Ekspor Gap Analysis CSV</button>
+      <button class="secondary" id="exportBackup">Unduh Cadangan Lengkap JSON</button>
+    </div>
+    <hr>
+    <p class="small">Menghapus data browser atau berpindah perangkat dapat membuat data tidak tersedia di perangkat baru. Ekspor cadangan secara berkala.</p>
+  </div>
+</section>
+</main>
+<footer>Sales Competitor Benchmarking · Data internal perusahaan</footer>
+
+<script>
+const STORAGE_KEY = "salesCompetitorBenchmarking_v4";
+const stageNames = [
+"Respons awal dan sambutan",
+"Menggali kebutuhan",
+"Rekomendasi produk dan product knowledge",
+"Harga, promo, dan ketentuan pembelian",
+"Ketersediaan stok dan solusi alternatif",
+"Pengiriman, pembayaran, dan layanan",
+"Cross-selling dan penawaran tambahan",
+"Menangani keberatan dan keraguan",
+"Closing dan langkah transaksi berikutnya",
+"Follow-up dan repeat order"
+];
+const stageQuestions = [
+"Seberapa cepat sales merespons? Apakah sambutannya ramah dan profesional?",
+"Apakah sales bertanya tentang kebutuhan, anggaran, tujuan, dan preferensi pelanggan?",
+"Apakah rekomendasi sesuai kebutuhan? Apakah sales menguasai spesifikasi dan manfaat produk?",
+"Bagaimana harga offline dibanding online? Apakah promo, diskon, syarat, dan biaya tambahan dijelaskan transparan?",
+"Apakah stok diinformasikan dengan jelas? Apakah tersedia produk pengganti jika stok kosong?",
+"Bagaimana pilihan pembayaran, estimasi pengiriman, biaya kirim, dan layanan purnajual?",
+"Apakah sales menawarkan produk pelengkap, paket, atau produk tambahan yang relevan?",
+"Bagaimana sales merespons keberatan harga, keraguan, atau permintaan waktu untuk berpikir?",
+"Apakah sales membantu proses transaksi dan menjelaskan langkah berikutnya dengan jelas?",
+"Apakah ada follow-up setelah pembelian dan upaya mendorong repeat order?"
+];
+let data = {competitors:[], gaps:[]};
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) data = {...data, ...JSON.parse(saved)};
+} catch(e) {}
+const $ = id => document.getElementById(id);
+const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const makeId = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); renderAll(); }
+function showTab(id){
+  document.querySelectorAll(".tab").forEach(el=>el.classList.toggle("hidden",el.id!==id));
+  document.querySelectorAll("nav button").forEach(el=>el.classList.toggle("active",el.dataset.tab===id));
 }
-function persist() {
-  localStorage.setItem("scb_records", JSON.stringify(records));
-  render();
+document.querySelectorAll("nav button").forEach(btn=>btn.addEventListener("click",()=>showTab(btn.dataset.tab)));
+
+function addBranchRow(branch={}) {
+  const div=document.createElement("div");
+  div.className="stage";
+  div.innerHTML=`
+    <div class="grid">
+      <div class="field"><label>Nama cabang</label><input data-branch="name" value="${esc(branch.name)}" placeholder="Contoh: Cabang pusat"></div>
+      <div class="field"><label>Alamat cabang</label><input data-branch="address" value="${esc(branch.address)}" placeholder="Alamat lengkap"></div>
+      <div class="field"><label>Kontak cabang</label><input data-branch="contact" value="${esc(branch.contact)}" placeholder="Nomor telepon"></div>
+      <div class="field"><label>Hari operasional</label><input data-branch="days" value="${esc(branch.days)}" placeholder="Senin–Sabtu"></div>
+      <div class="field"><label>Jam buka</label><input data-branch="hours" value="${esc(branch.hours)}" placeholder="09.00–17.00"></div>
+      <div class="field"><label>Libur nasional</label><select data-branch="holiday"><option ${branch.holiday==="Belum diketahui"||!branch.holiday?"selected":""}>Belum diketahui</option><option ${branch.holiday==="Tutup"?"selected":""}>Tutup</option><option ${branch.holiday==="Buka"?"selected":""}>Buka</option></select></div>
+      <div class="field full"><label>Catatan cabang</label><textarea data-branch="notes" placeholder="Kondisi toko, keramaian, dan temuan">${esc(branch.notes)}</textarea></div>
+    </div>
+    <div class="actions"><button type="button" class="danger removeBranch">Hapus Cabang Ini</button></div>`;
+  div.querySelector(".removeBranch").addEventListener("click",()=>div.remove());
+  $("branches").appendChild(div);
 }
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+$("addBranch").addEventListener("click",()=>addBranchRow());
+function getBranches(){
+  return [...$("branches").children].map(el=>{
+    const o={};
+    el.querySelectorAll("[data-branch]").forEach(inp=>o[inp.dataset.branch]=inp.value.trim());
+    return o;
+  }).filter(b=>b.name||b.address||b.contact);
 }
-function render() {
-  $("total").textContent = records.length;
-  $("observations").textContent = records.length;
-  $("average").textContent = records.length ? (records.reduce((a,r)=>a+score(r),0)/records.length).toFixed(1) : "0";
-  $("highest").textContent = records.length ? Math.max(...records.map(score)).toFixed(1) : "0";
-  let list = records.filter(r => {
-    const q = $("search").value.toLowerCase();
-    const matches = [r.name,r.city,r.category,r.observer].some(v => String(v||"").toLowerCase().includes(q));
-    const s = score(r), f = $("scoreFilter").value;
-    return matches && (!f || (f==="1" ? s<3 : f==="3" ? s>=3 && s<4 : s>=4));
+function renderStages(existing={}) {
+  $("stages").innerHTML="";
+  stageNames.forEach((name,i)=>{
+    const old=existing[i]||{};
+    const div=document.createElement("div");
+    div.className="stage";
+    div.innerHTML=`
+      <h4>${i+1}. ${esc(name)}</h4>
+      <p>${esc(stageQuestions[i])}</p>
+      <div class="stagegrid">
+        <div class="field"><label>Hasil observasi</label><textarea data-observation="${i}" placeholder="Tuliskan fakta yang diamati">${esc(old.observation||"")}</textarea></div>
+        <div class="field"><label>Skor</label><select data-score="${i}">
+          <option value="" ${old.score===""||old.score==null?"selected":""}>Belum diamati</option>
+          <option value="1" ${String(old.score)==="1"?"selected":""}>1 — Kurang</option>
+          <option value="2" ${String(old.score)==="2"?"selected":""}>2 — Cukup</option>
+          <option value="3" ${String(old.score)==="3"?"selected":""}>3 — Baik</option>
+        </select></div>
+      </div>`;
+    $("stages").appendChild(div);
   });
-  const sort = $("sort").value;
-  list.sort((a,b)=> sort==="highest" ? score(b)-score(a) : sort==="lowest" ? score(a)-score(b) : sort==="name" ? a.name.localeCompare(b.name) : b.date.localeCompare(a.date));
-  $("rows").innerHTML = list.map(r => `<tr>
-    <td><strong>${escapeHTML(r.name)}</strong><br><span class="muted">${escapeHTML(r.category)}</span></td>
-    <td>${escapeHTML(r.city)}</td>
-    <td>${escapeHTML(r.date)}</td>
-    <td class="score">${score(r).toFixed(1)} / 5</td>
-    <td><strong>+</strong> ${escapeHTML(r.strengths||"-")}<br><strong>−</strong> ${escapeHTML(r.weaknesses||"-")}<br><span class="muted">${escapeHTML(r.notes||"")}</span></td>
-    <td>${escapeHTML(r.observer||"-")}</td>
-    <td><button type="button" class="secondary" onclick="editRecord('${r.id}')">Edit</button> <button type="button" class="danger" onclick="deleteRecord('${r.id}')">Hapus</button></td>
-  </tr>`).join("");
-  $("empty").style.display = list.length ? "none" : "block";
 }
-$("competitorForm").addEventListener("submit", e => {
+function getStages(){
+  return stageNames.map((name,i)=>({
+    name,
+    observation:$(`[data-observation="${i}"]`).value.trim(),
+    score:$(`[data-score="${i}"]`).value
+  }));
+}
+function resetCompetitorForm(){
+  $("competitorForm").reset(); $("editId").value="";
+  $("formTitle").textContent="Tambah Kompetitor";
+  $("branches").innerHTML=""; addBranchRow();
+  renderStages();
+}
+$("resetForm").addEventListener("click",resetCompetitorForm);
+
+$("competitorForm").addEventListener("submit",e=>{
   e.preventDefault();
-  const id = $("editId").value;
-  const data = {};
-  fields.forEach(f => data[f] = $(f).value.trim());
-  if (id) {
-    const i = records.findIndex(r=>r.id===id);
-    if(i>=0) records[i] = {...records[i],...data};
-  } else {
-    records.push({id:Date.now().toString(),...data});
-  }
-  persist();
-  resetForm();
-  alert(id ? "Observasi berhasil diperbarui." : "Observasi berhasil disimpan.");
+  const id=$("editId").value;
+  const existing=data.competitors.find(c=>c.id===id);
+  const item={
+    id:id||makeId(),
+    name:$("name").value.trim(),
+    category:$("category").value.trim(),
+    city:$("city").value.trim(),
+    website:$("website").value.trim(),
+    contact:$("contact").value.trim(),
+    pic:$("pic").value.trim(),
+    visitDate:$("visitDate").value,
+    ourCompany:$("ourCompany").value.trim(),
+    branches:getBranches(),
+    stages:getStages(),
+    createdAt:existing?.createdAt||new Date().toISOString(),
+    updatedAt:new Date().toISOString()
+  };
+  if(existing) data.competitors=data.competitors.map(c=>c.id===id?item:c);
+  else data.competitors.push(item);
+  save(); resetCompetitorForm(); showTab("list");
+  alert("Data kompetitor berhasil disimpan di browser ini.");
 });
-function editRecord(id) {
-  const r = records.find(r=>r.id===id);
-  if(!r) return;
-  $("editId").value = id;
-  fields.forEach(f=>$(f).value = r[f] ?? "");
-  $("formTitle").textContent = "Edit Observasi Kompetitor";
-  $("saveButton").textContent = "Simpan Perubahan";
-  $("cancelButton").hidden = false;
+
+function averageScore(c){
+  const scores=(c.stages||[]).map(s=>s.score).filter(s=>s!==""&&s!=null).map(Number);
+  return scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : null;
+}
+function scoreLabel(c){
+  const s=averageScore(c);
+  return s===null?"Belum ada skor":s.toFixed(2)+" / 3";
+}
+function editCompetitor(id){
+  const c=data.competitors.find(x=>x.id===id); if(!c)return;
+  $("editId").value=c.id; $("formTitle").textContent="Edit Kompetitor";
+  ["name","category","city","website","contact","pic","visitDate","ourCompany"].forEach(k=>$(k).value=c[k]||"");
+  $("branches").innerHTML="";
+  (c.branches?.length?c.branches:[{}]).forEach(b=>addBranchRow(b));
+  renderStages(c.stages||[]);
+  showTab("form"); window.scrollTo({top:0,behavior:"smooth"});
+}
+function deleteCompetitor(id){
+  const c=data.competitors.find(x=>x.id===id);
+  if(!c||!confirm(`Hapus kompetitor "${c.name}"? Gap analysis terkait juga akan dihapus.`))return;
+  data.competitors=data.competitors.filter(x=>x.id!==id);
+  data.gaps=data.gaps.filter(g=>g.competitorId!==id);
+  save();
+}
+function renderCompetitors(){
+  const q=$("search").value.toLowerCase();
+  const city=$("filterCity").value, cat=$("filterCategory").value, scoreFilter=$("filterScore").value;
+  const rows=data.competitors.filter(c=>{
+    const hay=[c.name,c.city,c.category,c.pic,c.contact].join(" ").toLowerCase();
+    if(q&&!hay.includes(q))return false;
+    if(city&&c.city!==city)return false;
+    if(cat&&c.category!==cat)return false;
+    const s=averageScore(c);
+    if(scoreFilter==="none"&&s!==null)return false;
+    if(scoreFilter==="high"&&(s===null||s<2.5))return false;
+    if(scoreFilter==="medium"&&(s===null||s<1.5||s>=2.5))return false;
+    if(scoreFilter==="low"&&(s===null||s>=1.5))return false;
+    return true;
+  });
+  $("competitorRows").innerHTML=rows.length?rows.map(c=>`
+    <tr><td><b>${esc(c.name)}</b><br><span class="small">${esc(c.contact)}</span></td>
+    <td>${esc(c.city)}<br><span class="small">${esc(c.category)}</span></td>
+    <td>${(c.branches||[]).length}</td><td>${scoreLabel(c)}</td><td>${esc(c.pic||"-")}</td>
+    <td><button class="secondary" onclick="editCompetitor('${c.id}')">Edit</button> <button class="danger" onclick="deleteCompetitor('${c.id}')">Hapus</button></td></tr>`).join(""):`<tr><td colspan="6">Belum ada data yang cocok.</td></tr>`;
+}
+["search","filterCity","filterCategory","filterScore"].forEach(id=>$(id).addEventListener("input",renderCompetitors));
+
+function refreshFilters(){
+  const cities=[...new Set(data.competitors.map(c=>c.city).filter(Boolean))].sort();
+  const cats=[...new Set(data.competitors.map(c=>c.category).filter(Boolean))].sort();
+  const keepCity=$("filterCity").value, keepCat=$("filterCategory").value;
+  $("filterCity").innerHTML='<option value="">Semua kota</option>'+cities.map(x=>`<option>${esc(x)}</option>`).join("");
+  $("filterCategory").innerHTML='<option value="">Semua kategori</option>'+cats.map(x=>`<option>${esc(x)}</option>`).join("");
+  $("filterCity").value=keepCity; $("filterCategory").value=keepCat;
+  const keepGap=$("gapCompetitor").value;
+  $("gapCompetitor").innerHTML='<option value="">Pilih kompetitor</option>'+data.competitors.map(c=>`<option value="${c.id}">${esc(c.name)} — ${esc(c.city)}</option>`).join("");
+  $("gapCompetitor").value=keepGap;
+}
+function renderDashboard(){
+  $("statCompetitors").textContent=data.competitors.length;
+  $("statBranches").textContent=data.competitors.reduce((n,c)=>n+(c.branches||[]).length,0);
+  const all=data.competitors.flatMap(c=>c.stages||[]);
+  const observed=all.filter(s=>s.score!==""&&s.score!=null).length;
+  $("statObserved").textContent=all.length?Math.round(observed/all.length*100)+"%":"0%";
+  $("statActions").textContent=data.gaps.filter(g=>g.actionStatus!=="Selesai").length;
+  $("dashboardRows").innerHTML=data.competitors.length?data.competitors.map(c=>`<tr>
+    <td>${esc(c.name)}</td><td>${esc(c.city)}</td><td>${esc(c.category)}</td>
+    <td>${(c.branches||[]).length}</td><td>${scoreLabel(c)}</td>
+    <td><button class="secondary" onclick="editCompetitor('${c.id}')">Lihat / Edit</button></td></tr>`).join(""):`<tr><td colspan="6">Belum ada data. Tambahkan kompetitor terlebih dahulu.</td></tr>`;
+}
+$("gapForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const id=$("gapEditId").value;
+  const item={
+    id:id||makeId(),competitorId:$("gapCompetitor").value,
+    area:$("gapArea").value.trim(),competitorStatus:$("competitorStatus").value,
+    ourStatus:$("ourStatus").value,priority:$("priority").value,
+    actionPIC:$("actionPIC").value.trim(),actionStatus:$("actionStatus").value,
+    dueDate:$("dueDate").value,actionPlan:$("actionPlan").value.trim(),
+    notes:$("gapNotes").value.trim(),updatedAt:new Date().toISOString()
+  };
+  if(id)data.gaps=data.gaps.map(g=>g.id===id?item:g);
+  else data.gaps.push(item);
+  save(); $("gapForm").reset(); $("gapEditId").value=""; showTab("gap");
+  alert("Gap analysis berhasil disimpan.");
+});
+$("resetGap").addEventListener("click",()=>{$("gapForm").reset();$("gapEditId").value="";});
+function editGap(id){
+  const g=data.gaps.find(x=>x.id===id);if(!g)return;
+  $("gapEditId").value=g.id;
+  ["competitorId","area","competitorStatus","ourStatus","priority","actionPIC","actionStatus","dueDate","actionPlan","notes"].forEach(k=>{
+    const fieldMap={competitorId:"gapCompetitor",area:"gapArea",competitorStatus:"competitorStatus",ourStatus:"ourStatus",priority:"priority",actionPIC:"actionPIC",actionStatus:"actionStatus",dueDate:"dueDate",actionPlan:"actionPlan",notes:"gapNotes"};
+    $(fieldMap[k]).value=g[k]||"";
+  });
   window.scrollTo({top:0,behavior:"smooth"});
 }
-function deleteRecord(id) {
-  if(!confirm("Yakin ingin menghapus observasi ini?")) return;
-  records = records.filter(r=>r.id!==id);
-  persist();
-  if($("editId").value===id) resetForm();
+function deleteGap(id){
+  if(!confirm("Hapus gap analysis ini?"))return;
+  data.gaps=data.gaps.filter(g=>g.id!==id);save();
 }
-function resetForm() {
-  $("competitorForm").reset();
-  $("editId").value = "";
-  $("date").value = today;
-  $("formTitle").textContent = "Tambah Observasi Kompetitor";
-  $("saveButton").textContent = "Simpan Observasi";
-  $("cancelButton").hidden = true;
+function renderGaps(){
+  $("gapRows").innerHTML=data.gaps.length?data.gaps.map(g=>{
+    const c=data.competitors.find(x=>x.id===g.competitorId);
+    return `<tr><td>${esc(c?.name||"Kompetitor dihapus")}</td><td>${esc(g.area)}</td>
+    <td>${esc(g.competitorStatus)}</td><td>${esc(g.ourStatus)}</td>
+    <td><span class="badge ${g.priority==="High"?"high":g.priority==="Low"?"low":"medium"}">${esc(g.priority)}</span></td>
+    <td>${esc(g.actionPlan||"-")}<br><span class="small">PIC: ${esc(g.actionPIC||"-")} · Target: ${esc(g.dueDate||"-")}</span></td>
+    <td>${esc(g.actionStatus)}</td>
+    <td><button class="secondary" onclick="editGap('${g.id}')">Edit</button> <button class="danger" onclick="deleteGap('${g.id}')">Hapus</button></td></tr>`;
+  }).join(""):`<tr><td colspan="8">Belum ada gap analysis.</td></tr>`;
+  const counts={"Sudah punya":0,"Belum punya":0,"Belum diketahui":0};
+  data.gaps.forEach(g=>{if(counts[g.ourStatus]!==undefined)counts[g.ourStatus]++;});
+  $("gapSummary").textContent=`Kondisi perusahaan kita — Sudah punya: ${counts["Sudah punya"]} · Belum punya: ${counts["Belum punya"]} · Belum diketahui: ${counts["Belum diketahui"]}. Total gap: ${data.gaps.length}.`;
 }
-$("cancelButton").addEventListener("click",resetForm);
-$("resetButton").addEventListener("click",()=>setTimeout(resetForm,0));
-["search","scoreFilter","sort"].forEach(id=>$(id).addEventListener("input",render));
-$("exportButton").addEventListener("click",()=>{
-  if(!records.length){alert("Belum ada data untuk diekspor.");return;}
-  const cols = [...fields,"score"];
-  const quote = v => '"' + String(v??"").replace(/"/g,'""') + '"';
-  const csv = [cols.map(quote).join(","),...records.map(r=>cols.map(c=>quote(c==="score"?score(r).toFixed(1):r[c])).join(","))].join("\r\n");
-  const blob = new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");a.href=url;a.download="sales-competitor-benchmarking.csv";a.click();
-  URL.revokeObjectURL(url);
+function renderAll(){refreshFilters();renderDashboard();renderCompetitors();renderGaps();}
+function csvCell(value){return '"'+String(value??"").replace(/"/g,'""')+'"';}
+function downloadFile(filename,content,type="text/csv;charset=utf-8;"){
+  const blob=new Blob(["\ufeff",content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=filename;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportCSV(filename,headers,rows){
+  downloadFile(filename,[headers,...rows].map(row=>row.map(csvCell).join(",")).join("\r\n"));
+}
+$("exportCompetitors").addEventListener("click",()=>{
+  const headers=["name","category","city","website","contact","pic","visitDate","ourCompany","branchCount","averageScore","branchesJSON","stagesJSON"];
+  exportCSV("kompetitor.csv",headers,data.competitors.map(c=>[c.name,c.category,c.city,c.website,c.contact,c.pic,c.visitDate,c.ourCompany,(c.branches||[]).length,averageScore(c),JSON.stringify(c.branches||[]),JSON.stringify(c.stages||[])]));
 });
-render();
+$("exportGaps").addEventListener("click",()=>{
+  const headers=["competitor","area","competitorStatus","ourStatus","priority","actionPIC","actionStatus","dueDate","actionPlan","notes"];
+  exportCSV("gap-analysis.csv",headers,data.gaps.map(g=>[data.competitors.find(c=>c.id===g.competitorId)?.name||"",g.area,g.competitorStatus,g.ourStatus,g.priority,g.actionPIC,g.actionStatus,g.dueDate,g.actionPlan,g.notes]));
+});
+$("exportBackup").addEventListener("click",()=>downloadFile("backup-sales-competitor.json",JSON.stringify(data,null,2),"application/json"));
+function parseCSV(text){
+  const rows=[];let row=[],cell="",quoted=false;
+  text=text.replace(/^\uFEFF/,"");
+  for(let i=0;i<text.length;i++){
+    const ch=text[i],next=text[i+1];
+    if(ch==='"'&&quoted&&next==='"'){cell+='"';i++;}
+    else if(ch==='"'){quoted=!quoted;}
+    else if(ch===","&&!quoted){row.push(cell);cell="";}
+    else if((ch==="\n"||ch==="\r")&&!quoted){
+      if(ch==="\r"&&next==="\n")i++;
+      row.push(cell);if(row.some(x=>x.trim()))rows.push(row);
+      row=[];cell="";
+    }else cell+=ch;
+  }
+  if(cell.length||row.length){row.push(cell);if(row.some(x=>x.trim()))rows.push(row);}
+  return rows;
+}
+function normalizeHeader(s){
+  return String(s||"").trim().toLowerCase().replace(/[\s_\-\/]+/g,"").replace(/[^\p{L}\p{N}]/gu,"");
+}
+const headerAliases={
+  name:["name","namakompetitor","namaperusahaan","namatoko","kompetitor"],
+  category:["category","kategori","kategoribisnis","jenisbisnis"],
+  city:["city","kota","lokasi"],
+  website:["website","mediasosial","sosmed","url"],
+  contact:["contact","kontak","telepon","nomortelepon","nohp"],
+  pic:["pic","pengamat","picinternal"],
+  ourCompany:["ourcompany","perusahaankita","namaperusahaankita"]
+};
+function mappedValue(headers,row,key){
+  const aliases=headerAliases[key]||[key];
+  const index=headers.findIndex(h=>aliases.includes(normalizeHeader(h)));
+  return index<0?"":String(row[index]||"").trim();
+}
+$("importBtn").addEventListener("click",async()=>{
+  const file=$("csvFile").files[0];
+  if(!file){alert("Pilih file CSV terlebih dahulu.");return;}
+  const rows=parseCSV(await file.text());
+  if(rows.length<2){alert("CSV kosong atau tidak memiliki baris data.");return;}
+  const headers=rows[0];
+  let added=0,updated=0,skipped=0;
+  const mode=prompt("Jika nama kompetitor sudah ada, ketik UPDATE untuk memperbarui atau SKIP untuk melewati. Ketik CANCEL untuk membatalkan.","SKIP");
+  if(mode===null)return;
+  const updateExisting=mode.trim().toUpperCase()==="UPDATE";
+  for(const row of rows.slice(1)){
+    const item={
+      name:mappedValue(headers,row,"name"),
+      category:mappedValue(headers,row,"category"),
+      city:mappedValue(headers,row,"city"),
+      website:mappedValue(headers,row,"website"),
+      contact:mappedValue(headers,row,"contact"),
+      pic:mappedValue(headers,row,"pic"),
+      ourCompany:mappedValue(headers,row,"ourCompany")
+    };
+    if(!item.name){skipped++;continue;}
+    const old=data.competitors.find(c=>c.name.toLowerCase()===item.name.toLowerCase()&&c.city.toLowerCase()===item.city.toLowerCase());
+    if(old){
+      if(updateExisting){
+        Object.keys(item).forEach(k=>{if(item[k])old[k]=item[k];});
+        old.updatedAt=new Date().toISOString();updated++;
+      }else skipped++;
+    }else{
+      data.competitors.push({...item,id:makeId(),visitDate:"",branches:[],stages:stageNames.map(name=>({name,observation:"",score:""})),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()});
+      added++;
+    }
+  }
+  save();
+  alert(`Import selesai.\nData baru: ${added}\nDiperbarui: ${updated}\nDilewati: ${skipped}`);
+});
+addBranchRow();
+renderStages();
+renderAll();
 </script>
 </body>
 </html>
