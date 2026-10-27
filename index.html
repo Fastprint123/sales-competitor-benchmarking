@@ -331,6 +331,16 @@ function getStages(){
     };
   });
 }
+  
+function resetCompetitorForm(){
+  $("competitorForm").reset();
+  $("editId").value = "";
+  $("branches").innerHTML = "";
+  $("productCategories").selectedIndex = -1;
+
+  addBranchRow({});
+  renderStages({});
+}
 
 $("resetForm").addEventListener("click",resetCompetitorForm);
 
