@@ -312,19 +312,26 @@ function renderStages(existing={}) {
     $("stages").appendChild(div);
   });
 }
+
 function getStages(){
-  return stageNames.map((name,i)=>({
-    name,
-    observation:$(`[data-observation="${i}"]`).value.trim(),
-    score:$(`[data-score="${i}"]`).value
-  }));
+  return stageNames.map((name,i)=>{
+    const observation = $(`[data-observation="${i}"]`);
+    const score = $(`[data-score="${i}"]`);
+
+    if (!observation || !score) {
+      throw new Error(
+        `Kolom observasi atau skor tahap ${i+1} tidak ditemukan.`
+      );
+    }
+
+    return {
+      name,
+      observation: observation.value.trim(),
+      score: score.value
+    };
+  });
 }
-function resetCompetitorForm(){
-  $("competitorForm").reset(); $("editId").value="";
-  $("formTitle").textContent="Tambah Kompetitor";
-  $("branches").innerHTML=""; addBranchRow();
-  renderStages();
-}
+
 $("resetForm").addEventListener("click",resetCompetitorForm);
 
 $("competitorForm").addEventListener("submit",e=>{
