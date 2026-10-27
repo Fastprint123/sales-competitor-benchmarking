@@ -313,24 +313,26 @@ function renderStages(existing={}) {
   });
 }
 
-function getStages(){
-  return stageNames.map((name,i)=>{
-    const observation = $(`[data-observation="${i}"]`);
-    const score = $(`[data-score="${i}"]`);
 
-    if (!observation || !score) {
-      throw new Error(
-        `Kolom observasi atau skor tahap ${i+1} tidak ditemukan.`
-      );
-    }
+function getStages(){
+  const container = $("stages");
+
+  return stageNames.map((name, i) => {
+    const observation = container.querySelector(
+      `[data-observation="${i}"]`
+    );
+    const score = container.querySelector(
+      `[data-score="${i}"]`
+    );
 
     return {
       name,
-      observation: observation.value.trim(),
-      score: score.value
+      observation: observation ? observation.value.trim() : "",
+      score: score ? score.value : ""
     };
   });
 }
+
   
 function resetCompetitorForm(){
   $("competitorForm").reset();
